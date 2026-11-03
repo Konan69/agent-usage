@@ -1,0 +1,23 @@
+{
+  "accounts": [
+    {
+      "name": "primary",
+      "kind": "claude",
+      "credential_path": "~/.claude/.credentials.json"
+    },
+    {
+      "name": "proxy",
+      "kind": "claude",
+      "credential_path": "~/.local/share/cli-proxy-api/auth/claude-example.json"
+    },
+    {
+      "name": "coding",
+      "kind": "codex",
+      "credential_path": "~/.codex/auth.json"
+    }
+  ],
+  "sync": {
+    "credential_path": "~/.claude/.credentials.json",
+    "target_path": "~/.local/share/cli-proxy-api/auth/claude-example.json"
+  }
+}

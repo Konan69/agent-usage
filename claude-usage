@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+"""Print Claude and Codex plan usage for configured accounts. Never prints tokens."""
+import argparse, json, os, urllib.request
+
+def get(url, headers):
+    return json.load(urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=15))
+
+def claude(name, credential_path):
+    with open(os.path.expanduser(credential_path)) as handle:
+        credential = json.load(handle)
+    token = credential['claudeAiOauth']['accessToken'] if 'claudeAiOauth' in credential else credential['access_token']
+    d = get('https://api.anthropic.com/api/oauth/usage', {'Authorization': 'Bearer ' + token, 'anthropic-beta': 'oauth-2025-04-20'})
+    for k in ('five_hour', 'seven_day'):
+        v = d.get(k) or {}
+        print(f"claude {name} {k}: {v.get('utilization')}% resets {v.get('resets_at')}")
+
+def codex(name, credential_path):
+    t = json.load(open(os.path.expanduser(credential_path)))['tokens']
+    d = get('https://chatgpt.com/backend-api/wham/usage', {'Authorization': 'Bearer ' + t['access_token'], 'ChatGPT-Account-Id': t['account_id'], 'User-Agent': 'codex-cli'})
+    w = d['rate_limit']['primary_window']
+    print(f"codex {name} ({d.get('plan_type')}) {w['limit_window_seconds'] // 86400}d: {w['used_percent']}% reset_after {w['reset_after_seconds'] // 3600}h")
+
+def run(label, f, *a):
+    try:
+        f(*a)
+    except Exception as e:
+        print(f"{label}: unreadable ({type(e).__name__}: {e})")
+
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--config', default='~/.config/agent-usage/config.json', help='JSON config path (default: %(default)s)')
+args = parser.parse_args()
+with open(os.path.expanduser(args.config)) as handle:
+    config = json.load(handle)
+for account in config['accounts']:
+    name, kind, path = account['name'], account['kind'], account['credential_path']
+    if kind == 'claude':
+        run('claude ' + name, claude, name, path)
+    elif kind == 'codex':
+        run('codex ' + name, codex, name, path)
+    else:
+        parser.error('unknown account kind: ' + kind)
