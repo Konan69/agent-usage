@@ -1,0 +1,105 @@
+{
+  "repo": "agent-usage",
+  "accent": "#FFB86B",
+  "hero": {
+    "command": "./claude-usage --config config.json",
+    "output": [
+      {
+        "text": "claude primary seven_day: 74.0% resets 2026-11-04T14:00:00.070937+00:00"
+      },
+      {
+        "text": "claude proxy-1 five_hour: 6.0% resets 2026-11-03T21:39:59.730486+00:00"
+      },
+      {
+        "text": "claude proxy-1 seven_day: 85.0% resets 2026-11-04T21:59:59.730510+00:00",
+        "style": "accent"
+      },
+      {
+        "text": "codex coding-1 (pro) 7d: 8% reset_after 158h"
+      },
+      {
+        "text": "codex coding-2 (free) 30d: 52% reset_after 350h"
+      }
+    ],
+    "value": "How much of each plan's quota is gone, per account."
+  },
+  "diagram": {
+    "direction": "LR",
+    "nodes": [
+      {
+        "id": "config",
+        "label": "config.json",
+        "sublabel": "accounts, sync"
+      },
+      {
+        "id": "creds",
+        "label": "Credential files",
+        "sublabel": "credential_path"
+      },
+      {
+        "id": "usage",
+        "label": "claude-usage",
+        "sublabel": "read only"
+      },
+      {
+        "id": "sync",
+        "label": "cliproxy-claude-sync",
+        "sublabel": "copies a token"
+      },
+      {
+        "id": "anth",
+        "label": "api.anthropic.com",
+        "sublabel": "/api/oauth/usage"
+      },
+      {
+        "id": "oai",
+        "label": "chatgpt.com",
+        "sublabel": "/backend-api/wham/usage"
+      },
+      {
+        "id": "target",
+        "label": "CLIProxyAPI auth file",
+        "sublabel": "target_path"
+      }
+    ],
+    "edges": [
+      {
+        "from": "config",
+        "to": "usage"
+      },
+      {
+        "from": "creds",
+        "to": "usage",
+        "label": "token"
+      },
+      {
+        "from": "config",
+        "to": "sync"
+      },
+      {
+        "from": "creds",
+        "to": "sync"
+      },
+      {
+        "from": "usage",
+        "to": "anth",
+        "label": "claude"
+      },
+      {
+        "from": "usage",
+        "to": "oai",
+        "label": "codex"
+      },
+      {
+        "from": "sync",
+        "to": "target",
+        "label": "write"
+      }
+    ],
+    "primary": [
+      "creds",
+      "usage",
+      "anth"
+    ]
+  }
+}
