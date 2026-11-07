@@ -1,6 +1,6 @@
 # agent-usage
 
-*A fuel gauge for people who own too many AI subscriptions and still run out.*
+How much Claude and Codex quota you have left, across every account you pay for.
 
 Two small scripts for people who run several Claude and Codex subscriptions. `claude-usage` prints how much of each account's plan quota is used. `cliproxy-claude-sync` copies a Claude Code sign-in into a CLIProxyAPI auth file.
 
