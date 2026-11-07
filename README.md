@@ -1,5 +1,7 @@
 # agent-usage
 
+*A fuel gauge for people who own too many AI subscriptions and still run out.*
+
 Two small scripts for people who run several Claude and Codex subscriptions. `claude-usage` prints how much of each account's plan quota is used. `cliproxy-claude-sync` copies a Claude Code sign-in into a CLIProxyAPI auth file.
 
 ![The terminal runs ./claude-usage --config config.json and prints the used share of the five-hour and seven-day windows for two Claude accounts and the usage window for two Codex accounts](docs/media/hero.gif)
