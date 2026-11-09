@@ -4,7 +4,7 @@ How much Claude and Codex quota you have left, across every account you pay for.
 
 `claude-usage` asks each provider's usage endpoint with the token already on disk and prints one line per window: about 3 seconds for four accounts, no tokens printed. I run it before deciding which account takes the next big job. `cliproxy-claude-sync` copies a Claude Code sign-in into a CLIProxyAPI auth file without the two fighting over token refresh.
 
-![The terminal runs ./claude-usage --config config.json and prints the used share of the five-hour and seven-day windows for two Claude accounts and the usage window for two Codex accounts](docs/media/hero.gif)
+![Explainer: claude-usage reads four accounts' tokens from disk, asks api.anthropic.com and chatgpt.com usage endpoints, and fills one gauge per window (74%, 6%, 85%, 8%, 52%), picking the account with headroom; then cliproxy-claude-sync copies the token into the proxy file with an empty refresh_token](docs/media/hero.gif)
 
 ## Install
 
